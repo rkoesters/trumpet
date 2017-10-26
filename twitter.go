@@ -26,6 +26,20 @@ func initTwitter() {
 	twitter.SetLogger(anaconda.BasicLogger)
 }
 
+func getUserIDs(userNames []string) []string {
+	var userIDs []string
+
+	// get IDs for users in following
+	for _, userName := range userNames {
+		u, err := twitter.GetUsersShow(userName, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+		userIDs = append(userIDs, u.IdStr)
+	}
+	return userIDs
+}
+
 // tweet posts a tweet with contents s
 func tweet(s string) {
 	if !*live {
@@ -39,23 +53,12 @@ func tweet(s string) {
 	}
 }
 
-func listenForTweets(following []string) <-chan string {
+func listenForTweets(userIDs []string) <-chan string {
 	c := make(chan string)
 	go func() {
-		var userIds []string
-
-		// get IDs for users in following
-		for _, userName := range following {
-			u, err := twitter.GetUsersShow(userName, nil)
-			if err != nil {
-				log.Fatal(err)
-			}
-			userIds = append(userIds, u.IdStr)
-		}
-
 		// start listening for tweets from twitter
 		v := url.Values{}
-		v.Set("follow", strings.Join(userIds, ","))
+		v.Set("follow", strings.Join(userIDs, ","))
 		stream := twitter.PublicStreamFilter(v)
 		defer stream.Stop()
 
@@ -67,7 +70,7 @@ func listenForTweets(following []string) <-chan string {
 			case anaconda.Tweet:
 				// we only want tweets created by the
 				// users in userIds
-				if isStringInSlice(msg.User.IdStr, userIds) {
+				if isStringInSlice(msg.User.IdStr, userIDs) {
 					c <- msg.Text
 				}
 			}

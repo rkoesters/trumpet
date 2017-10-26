@@ -15,9 +15,11 @@ func main() {
 
 	initTwitter()
 
+	userIDs := getUserIDs(flag.Args())
+
 	gen := &dummyGenerator{}
 
-	incomingTweets := listenForTweets(flag.Args())
+	incomingTweets := listenForTweets(userIDs)
 	outgoingTweets := composeTweets(gen)
 
 	for {
