@@ -62,6 +62,20 @@ func tweet(s string) {
 	}
 }
 
+// isGoodTweet returns true if the tweet was written by one of the users
+// specified in userIDs.
+func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
+	if t.RetweetedStatus != nil {
+		// user didn't write tweet, they retweeted someone else.
+		return false
+	}
+	if !isStringInSlice(t.User.IdStr, userIDs) {
+		// tweet wasn't made by someone in userIDs.
+		return false
+	}
+	return true
+}
+
 // listenForTweets returns a channel of new tweets posted by the given
 // user IDs.
 func listenForTweets(userIDs []string) <-chan string {
@@ -79,9 +93,7 @@ func listenForTweets(userIDs []string) <-chan string {
 			default:
 				log.Printf("unknown message: %v", msg)
 			case anaconda.Tweet:
-				// we only want tweets created by the
-				// users in userIds
-				if isStringInSlice(msg.User.IdStr, userIDs) {
+				if isGoodTweet(msg, userIDs) {
 					c <- msg.Text
 				}
 			}
