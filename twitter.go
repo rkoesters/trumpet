@@ -19,6 +19,7 @@ var (
 
 var twitter *anaconda.TwitterApi
 
+// initTwitter prepares the twitter variable for use.
 func initTwitter() {
 	anaconda.SetConsumerKey(*consumerKey)
 	anaconda.SetConsumerSecret(*consumerSecret)
@@ -26,10 +27,11 @@ func initTwitter() {
 	twitter.SetLogger(anaconda.BasicLogger)
 }
 
+// getUserIDs takes a slice of twitter user names as input and returns a
+// slice of twitter user IDs.
 func getUserIDs(userNames []string) []string {
 	var userIDs []string
 
-	// get IDs for users in following
 	for _, userName := range userNames {
 		u, err := twitter.GetUsersShow(userName, nil)
 		if err != nil {
@@ -53,6 +55,8 @@ func tweet(s string) {
 	}
 }
 
+// listenForTweets returns a channel of new tweets posted by the given
+// user IDs.
 func listenForTweets(userIDs []string) <-chan string {
 	c := make(chan string)
 	go func() {
