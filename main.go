@@ -24,6 +24,7 @@ func main() {
 		select {
 		case t := <-incomingTweets:
 			log.Printf("incoming tweet: %v", t)
+			gen.Train(t)
 		case t := <-outgoingTweets:
 			log.Printf("outgoing tweet: %v", t)
 			tweet(t)
