@@ -25,6 +25,13 @@ func initTwitter() {
 	anaconda.SetConsumerSecret(*consumerSecret)
 	twitter = anaconda.NewTwitterApi(*accessToken, *accessSecret)
 	twitter.SetLogger(anaconda.BasicLogger)
+	ok, err := twitter.VerifyCredentials()
+	// ok should be set to false if err != nil, but we are checking
+	// both just in case behavior changes
+	if !ok || err != nil {
+		log.Print("twitter.VerifyCredentials() failed")
+		log.Fatal(err)
+	}
 }
 
 // getUserIDs takes a slice of twitter user names as input and returns a
