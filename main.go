@@ -14,10 +14,11 @@ func main() {
 	flag.Parse()
 
 	initTwitter()
-	initNeuralNetwork()
+
+	gen := &dummyGenerator{}
 
 	incomingTweets := listenForTweets(flag.Args())
-	outgoingTweets := composeTweets()
+	outgoingTweets := composeTweets(gen)
 
 	for {
 		select {
@@ -30,15 +31,14 @@ func main() {
 	}
 }
 
-func composeTweets() <-chan string {
+func composeTweets(gen Generator) <-chan string {
 	c := make(chan string)
 	go func() {
 		for {
-			// TODO use neural network to generate tweets
+			c <- gen.Generate(140)
+
+			time.Sleep(*freq)
 		}
 	}()
 	return c
 }
-
-// TODO remove these in favor of actual functions
-func initNeuralNetwork() {}
