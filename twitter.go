@@ -27,7 +27,7 @@ func initTwitter() {
 	twitter.SetLogger(anaconda.BasicLogger)
 	ok, err := twitter.VerifyCredentials()
 	// ok should be set to false if err != nil, but we are checking
-	// both just in case behavior changes
+	// both just in case behavior changes.
 	if !ok || err != nil {
 		log.Print("twitter.VerifyCredentials() failed")
 		log.Fatal(err)
@@ -49,7 +49,7 @@ func getUserIDs(userNames []string) []string {
 	return userIDs
 }
 
-// tweet posts a tweet with contents s
+// tweet posts a tweet with contents of s.
 func tweet(s string) {
 	if !*live {
 		log.Printf("tweet: %s", s)
