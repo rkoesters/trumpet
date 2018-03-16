@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/rkoesters/trumpet/gen/markov"
 	"log"
+	"math/rand"
 	"time"
 )
 
@@ -13,6 +14,8 @@ var (
 
 func main() {
 	flag.Parse()
+
+	rand.Seed(time.Now().Unix())
 
 	initTwitter()
 
@@ -46,7 +49,7 @@ func composeTweets(gen Generator) <-chan string {
 		for {
 			time.Sleep(*freq)
 
-			c <- gen.Generate(140)
+			c <- gen.Generate(280)
 		}
 	}()
 	return c

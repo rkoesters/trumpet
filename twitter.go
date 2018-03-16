@@ -52,7 +52,6 @@ func getUserIDs(userNames []string) []string {
 // tweet posts a tweet with contents of s.
 func tweet(s string) {
 	if !*live {
-		log.Printf("tweet: %s", s)
 		return
 	}
 
@@ -79,6 +78,7 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 func getPastTweets(userID string, c chan<- string) {
 	v := url.Values{}
 	v.Set("user_id", userID)
+	v.Set("count", "200")
 	timeline, err := twitter.GetUserTimeline(v)
 	if err != nil {
 		log.Fatal(err)
