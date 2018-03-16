@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/rkoesters/trumpet/gen/markov"
 	"log"
 	"time"
 )
@@ -17,7 +18,7 @@ func main() {
 
 	userIDs := getUserIDs(flag.Args())
 
-	gen := &dummyGenerator{}
+	gen := markov.NewChain(2)
 
 	incomingTweets := listenForTweets(userIDs)
 	outgoingTweets := composeTweets(gen)
