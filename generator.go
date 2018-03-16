@@ -1,4 +1,4 @@
-package main
+package trumpet
 
 // Generator gets trained by calls to Train and creates strings of text
 // by calls to Generate.

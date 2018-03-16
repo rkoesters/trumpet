@@ -1,4 +1,4 @@
-package main
+package twitter
 
 // isStringInSlice returns true if the string s is in slice of strings
 // slice, otherwise returns false.

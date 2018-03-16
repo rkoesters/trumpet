@@ -1,4 +1,4 @@
-package main
+package twitter
 
 import (
 	"flag"
@@ -19,8 +19,8 @@ var (
 
 var twitter *anaconda.TwitterApi
 
-// initTwitter prepares the twitter variable for use.
-func initTwitter() {
+// Init prepares the twitter variable for use.
+func Init() {
 	anaconda.SetConsumerKey(*consumerKey)
 	anaconda.SetConsumerSecret(*consumerSecret)
 	twitter = anaconda.NewTwitterApi(*accessToken, *accessSecret)
@@ -34,9 +34,9 @@ func initTwitter() {
 	}
 }
 
-// getUserIDs takes a slice of twitter user names as input and returns a
+// GetUserIDs takes a slice of twitter user names as input and returns a
 // slice of twitter user IDs.
-func getUserIDs(userNames []string) []string {
+func GetUserIDs(userNames []string) []string {
 	var userIDs []string
 
 	for _, userName := range userNames {
@@ -49,8 +49,8 @@ func getUserIDs(userNames []string) []string {
 	return userIDs
 }
 
-// tweet posts a tweet with contents of s.
-func tweet(s string) {
+// Tweet posts a tweet with contents of s.
+func Tweet(s string) {
 	if !*live {
 		return
 	}
@@ -75,7 +75,7 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
-func getPastTweets(userID string, c chan<- string) {
+func GetPastTweets(userID string, c chan<- string) {
 	v := url.Values{}
 	v.Set("user_id", userID)
 	v.Set("count", "200")
@@ -90,9 +90,9 @@ func getPastTweets(userID string, c chan<- string) {
 	}
 }
 
-// listenForTweets returns a channel of new tweets posted by the given
+// ListenForTweets returns a channel of new tweets posted by the given
 // user IDs.
-func listenForTweets(userIDs []string, c chan<- string) {
+func ListenForTweets(userIDs []string, c chan<- string) {
 	// start listening for tweets from twitter
 	v := url.Values{}
 	v.Set("follow", strings.Join(userIDs, ","))
