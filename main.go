@@ -19,13 +19,18 @@ func main() {
 	userIDs := getUserIDs(flag.Args())
 
 	gen := markov.NewChain(2)
+	c := make(chan string)
 
-	incomingTweets := listenForTweets(userIDs)
+	for _, userID := range userIDs {
+		go getPastTweets(userID, c)
+	}
+	go listenForTweets(userIDs, c)
+
 	outgoingTweets := composeTweets(gen)
 
 	for {
 		select {
-		case t := <-incomingTweets:
+		case t := <-c:
 			log.Printf("incoming tweet: %v", t)
 			gen.Train(t)
 		case t := <-outgoingTweets:
@@ -39,9 +44,9 @@ func composeTweets(gen Generator) <-chan string {
 	c := make(chan string)
 	go func() {
 		for {
-			c <- gen.Generate(140)
-
 			time.Sleep(*freq)
+
+			c <- gen.Generate(140)
 		}
 	}()
 	return c

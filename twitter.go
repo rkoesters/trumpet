@@ -76,28 +76,38 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
+func getPastTweets(userID string, c chan<- string) {
+	v := url.Values{}
+	v.Set("user_id", userID)
+	timeline, err := twitter.GetUserTimeline(v)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, t := range timeline {
+		if isGoodTweet(t, []string{userID}) {
+			c <- t.Text
+		}
+	}
+}
+
 // listenForTweets returns a channel of new tweets posted by the given
 // user IDs.
-func listenForTweets(userIDs []string) <-chan string {
-	c := make(chan string)
-	go func() {
-		// start listening for tweets from twitter
-		v := url.Values{}
-		v.Set("follow", strings.Join(userIDs, ","))
-		stream := twitter.PublicStreamFilter(v)
-		defer stream.Stop()
+func listenForTweets(userIDs []string, c chan<- string) {
+	// start listening for tweets from twitter
+	v := url.Values{}
+	v.Set("follow", strings.Join(userIDs, ","))
+	stream := twitter.PublicStreamFilter(v)
+	defer stream.Stop()
 
-		// iterate over incoming messages from twitter
-		for i := range stream.C {
-			switch msg := i.(type) {
-			default:
-				log.Printf("unknown message: %v", msg)
-			case anaconda.Tweet:
-				if isGoodTweet(msg, userIDs) {
-					c <- msg.Text
-				}
+	// iterate over incoming messages from twitter
+	for i := range stream.C {
+		switch msg := i.(type) {
+		default:
+			log.Printf("unknown message: %v", msg)
+		case anaconda.Tweet:
+			if isGoodTweet(msg, userIDs) {
+				c <- msg.Text
 			}
 		}
-	}()
-	return c
+	}
 }
