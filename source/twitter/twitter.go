@@ -3,6 +3,7 @@ package twitter
 import (
 	"flag"
 	"github.com/ChimeraCoder/anaconda"
+	"html"
 	"log"
 	"net/url"
 	"strconv"
@@ -111,7 +112,7 @@ func GetPastTweets(userID string, c chan<- string) {
 		}
 		for _, t := range timeline {
 			if t.IdStr != last && isGoodTweet(t, []string{userID}) {
-				c <- t.Text
+				c <- html.UnescapeString(t.Text)
 				last = t.IdStr
 			}
 		}
@@ -134,7 +135,7 @@ func ListenForTweets(userIDs []string, c chan<- string) {
 			log.Printf("unknown message: %v", msg)
 		case anaconda.Tweet:
 			if isGoodTweet(msg, userIDs) {
-				c <- msg.Text
+				c <- html.UnescapeString(msg.Text)
 			}
 		}
 	}
