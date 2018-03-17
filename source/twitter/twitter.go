@@ -5,6 +5,7 @@ import (
 	"github.com/ChimeraCoder/anaconda"
 	"log"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -47,6 +48,23 @@ func GetUserIDs(userNames []string) []string {
 		userIDs = append(userIDs, u.IdStr)
 	}
 	return userIDs
+}
+
+func GetFriends() ([]string, error) {
+	var userIDs []string
+	var v url.Values
+
+	friendsChan := twitter.GetFriendsIdsAll(v)
+
+	for fidp := range friendsChan {
+		for _, id := range fidp.Ids {
+			userIDs = append(userIDs, strconv.FormatInt(id, 10))
+		}
+		if fidp.Error != nil {
+			log.Printf("error ranging friends list: %v", fidp.Error)
+		}
+	}
+	return userIDs, nil
 }
 
 // Tweet posts a tweet with contents of s.
