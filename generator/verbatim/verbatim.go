@@ -12,8 +12,7 @@ func New() *Generator {
 }
 
 func (g *Generator) Train(s string) {
-	var v struct{}
-	g.m[s] = v
+	g.m[s] = struct{}{}
 }
 
 func (g *Generator) Generate(maxLength int) string {
