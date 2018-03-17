@@ -93,17 +93,25 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
+const PAST_TWEET_REQUESTS = 1
+
 func GetPastTweets(userID string, c chan<- string) {
-	v := url.Values{}
-	v.Set("user_id", userID)
-	v.Set("count", "200")
-	timeline, err := twitter.GetUserTimeline(v)
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, t := range timeline {
-		if isGoodTweet(t, []string{userID}) {
-			c <- t.Text
+	var last string
+	for i := 0; i < PAST_TWEET_REQUESTS; i++ {
+		v := url.Values{}
+		v.Set("user_id", userID)
+		v.Set("count", "50")
+		if last != "" {
+			v.Set("max_id", last)
+		}
+		timeline, err := twitter.GetUserTimeline(v)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, t := range timeline {
+			if isGoodTweet(t, []string{userID}) {
+				c <- t.Text
+			}
 		}
 	}
 }

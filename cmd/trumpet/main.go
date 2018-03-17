@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/rkoesters/trumpet"
 	"github.com/rkoesters/trumpet/generator/markov"
+	"github.com/rkoesters/trumpet/generator/multi"
 	"github.com/rkoesters/trumpet/source/twitter"
 	"log"
 	"math/rand"
@@ -32,8 +33,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	gen := markov.NewChain(3)
 	c := make(chan string)
+
+	gen := multi.New()
+	brain := markov.NewChain(2)
+	gen.AddTrainer(brain)
+	gen.SetGenerator(brain)
 
 	for _, userID := range userIDs {
 		go twitter.GetPastTweets(userID, c)
@@ -45,10 +50,10 @@ func main() {
 	for {
 		select {
 		case t := <-c:
-			log.Printf("incoming tweet: %v", t)
+			log.Printf("IN(((%v)))", t)
 			gen.Train(t)
 		case t := <-outgoingTweets:
-			log.Printf("outgoing tweet: %v", t)
+			log.Printf("OUT(((%v)))", t)
 			twitter.Tweet(t)
 		}
 	}
