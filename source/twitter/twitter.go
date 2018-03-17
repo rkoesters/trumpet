@@ -38,21 +38,6 @@ func Init() {
 	}
 }
 
-// GetUserIDs takes a slice of twitter user names as input and returns a
-// slice of twitter user IDs.
-func GetUserIDs(userNames []string) []string {
-	var userIDs []string
-
-	for _, userName := range userNames {
-		u, err := twitter.GetUsersShow(userName, nil)
-		if err != nil {
-			log.Fatal(err)
-		}
-		userIDs = append(userIDs, u.IdStr)
-	}
-	return userIDs
-}
-
 func GetFriends() ([]string, error) {
 	var userIDs []string
 	var v url.Values
