@@ -110,7 +110,7 @@ func GetPastTweets(userID string, c chan<- string) {
 			log.Fatal(err)
 		}
 		for _, t := range timeline {
-			if isGoodTweet(t, []string{userID}) {
+			if t.IdStr != last && isGoodTweet(t, []string{userID}) {
 				c <- t.Text
 				last = t.IdStr
 			}
