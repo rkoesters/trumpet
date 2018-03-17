@@ -93,7 +93,7 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
-const PAST_TWEET_REQUESTS = 50
+const PAST_TWEET_REQUESTS = 100
 
 func GetPastTweets(userID string, c chan<- string) {
 	var last string
@@ -101,6 +101,7 @@ func GetPastTweets(userID string, c chan<- string) {
 		v := url.Values{}
 		v.Set("user_id", userID)
 		v.Set("count", "50")
+		v.Set("exclude_replies", "true")
 		if last != "" {
 			v.Set("max_id", last)
 		}
@@ -111,6 +112,7 @@ func GetPastTweets(userID string, c chan<- string) {
 		for _, t := range timeline {
 			if isGoodTweet(t, []string{userID}) {
 				c <- t.Text
+				last = t.IdStr
 			}
 		}
 	}

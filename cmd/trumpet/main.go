@@ -36,7 +36,7 @@ func main() {
 	c := make(chan string)
 
 	gen := multi.New()
-	brain := markov.NewChain(2)
+	brain := markov.NewChain(3)
 	gen.AddTrainer(brain)
 	gen.SetGenerator(brain)
 
