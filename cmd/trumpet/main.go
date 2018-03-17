@@ -16,7 +16,7 @@ import (
 
 var (
 	freq        = flag.Duration("freq", time.Hour, "time between tweets")
-	chainLength = flag.Int("chain-length", 2, "length of each prefix in the markov chain")
+	chainLength = flag.Int("chain-length", 3, "length of each prefix in the markov chain")
 )
 
 func main() {
