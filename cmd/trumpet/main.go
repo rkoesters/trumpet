@@ -15,7 +15,8 @@ import (
 )
 
 var (
-	freq = flag.Duration("freq", time.Hour, "time between tweets")
+	freq        = flag.Duration("freq", time.Hour, "time between tweets")
+	chainLength = flag.Int("chain-length", 2, "length of each prefix in the markov chain")
 )
 
 func main() {
@@ -39,7 +40,7 @@ func main() {
 
 	gen := multi.New()
 
-	brain := markov.NewChain(3)
+	brain := markov.NewChain(*chainLength)
 	gen.AddTrainer(brain)
 	gen.SetGenerator(brain)
 
