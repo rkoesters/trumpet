@@ -93,7 +93,7 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
-const PAST_TWEET_REQUESTS = 1
+const PAST_TWEET_REQUESTS = 50
 
 func GetPastTweets(userID string, c chan<- string) {
 	var last string

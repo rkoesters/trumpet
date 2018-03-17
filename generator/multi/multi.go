@@ -28,5 +28,5 @@ func (g *Generator) Train(s string) {
 }
 
 func (g *Generator) Generate(maxLength int) string {
-	return g.Generate(maxLength)
+	return g.generator.Generate(maxLength)
 }
