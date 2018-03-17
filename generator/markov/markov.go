@@ -76,7 +76,7 @@ func (c *Chain) Generate(maxLength int) string {
 		numWords := maxLength / 6
 		words := c.GenerateWords(numWords)
 		text := strings.Join(words, " ")
-		if len(text) < maxLength {
+		if len(text) <= maxLength {
 			return text
 		}
 	}
