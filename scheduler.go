@@ -6,4 +6,5 @@ import (
 
 type Scheduler interface {
 	Train(d time.Time)
+	Chan() <-chan struct{}
 }

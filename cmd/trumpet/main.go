@@ -7,6 +7,7 @@ import (
 	"github.com/rkoesters/trumpet/generator/markov"
 	"github.com/rkoesters/trumpet/generator/multi"
 	"github.com/rkoesters/trumpet/generator/verbatim"
+	"github.com/rkoesters/trumpet/scheduler/sametime"
 	"github.com/rkoesters/trumpet/source/twitter"
 	"log"
 	"math/rand"
@@ -50,12 +51,14 @@ func main() {
 	duplicateChecker := verbatim.New()
 	gen.AddTrainer(duplicateChecker)
 
+	sched := sametime.New()
+
 	for _, userID := range userIDs {
 		go twitter.GetPastTweets(userID, c)
 	}
-	go twitter.ListenForTweets(userIDs, c)
+	go twitter.ListenForTweets(userIDs, c, sched)
 
-	outgoingTweets := composeTweets(gen, duplicateChecker)
+	outgoingTweets := composeTweets(gen, sched, duplicateChecker)
 
 	for {
 		select {
@@ -70,11 +73,11 @@ func main() {
 	}
 }
 
-func composeTweets(gen trumpet.Generator, checker *verbatim.Generator) <-chan string {
+func composeTweets(gen trumpet.Generator, sched *sametime.Scheduler, checker *verbatim.Generator) <-chan string {
 	c := make(chan string)
 	go func() {
 		for {
-			time.Sleep(*freq)
+			<-sched.Chan()
 
 			for {
 				t := gen.Generate(280)

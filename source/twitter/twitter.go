@@ -3,11 +3,13 @@ package twitter
 import (
 	"flag"
 	"github.com/ChimeraCoder/anaconda"
+	"github.com/rkoesters/trumpet"
 	"html"
 	"log"
 	"net/url"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var (
@@ -121,7 +123,7 @@ func GetPastTweets(userID string, c chan<- string) {
 
 // ListenForTweets returns a channel of new tweets posted by the given
 // user IDs.
-func ListenForTweets(userIDs []string, c chan<- string) {
+func ListenForTweets(userIDs []string, c chan<- string, sched trumpet.Scheduler) {
 	// start listening for tweets from twitter
 	v := url.Values{}
 	v.Set("follow", strings.Join(userIDs, ","))
@@ -136,6 +138,7 @@ func ListenForTweets(userIDs []string, c chan<- string) {
 		case anaconda.Tweet:
 			if isGoodTweet(msg, userIDs) {
 				c <- html.UnescapeString(msg.Text)
+				sched.Train(time.Now())
 			}
 		}
 	}
