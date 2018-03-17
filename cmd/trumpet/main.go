@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/rkoesters/trumpet"
+	"github.com/rkoesters/trumpet/generator/count"
 	"github.com/rkoesters/trumpet/generator/markov"
 	"github.com/rkoesters/trumpet/generator/multi"
 	"github.com/rkoesters/trumpet/source/twitter"
@@ -36,9 +37,13 @@ func main() {
 	c := make(chan string)
 
 	gen := multi.New()
+
 	brain := markov.NewChain(3)
 	gen.AddTrainer(brain)
 	gen.SetGenerator(brain)
+
+	counter := count.New()
+	gen.AddTrainer(counter)
 
 	for _, userID := range userIDs {
 		go twitter.GetPastTweets(userID, c)
@@ -52,6 +57,7 @@ func main() {
 		case t := <-c:
 			log.Printf("IN(((%v)))", t)
 			gen.Train(t)
+			log.Printf("input size: %v", *counter)
 		case t := <-outgoingTweets:
 			log.Printf("OUT(((%v)))", t)
 			twitter.Tweet(t)
