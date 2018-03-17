@@ -1,3 +1,4 @@
+// Package dummy provides a dummy trumpet.Generator.
 package dummy
 
 import (

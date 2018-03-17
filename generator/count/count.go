@@ -1,3 +1,5 @@
+// Package count provides a trumpet.Generator that keeps count of the
+// number of times Train is called.
 package count
 
 type Generator uint64

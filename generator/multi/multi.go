@@ -1,3 +1,5 @@
+// Package multi provides a trumpet.Generator that multiplexes training
+// data over multiple trumpet.Generators.
 package multi
 
 import (

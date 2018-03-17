@@ -1,3 +1,5 @@
+// Package sametime provides a trumpet.Scheduler that schedules tweets
+// to go out at the same time Train is called.
 package sametime
 
 import (

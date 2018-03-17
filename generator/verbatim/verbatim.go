@@ -1,3 +1,6 @@
+// Package verbatim provides a trumpet.Generator that keeps track of
+// training data for the purposes of checking that generated data isn't
+// identical to any piece of training data.
 package verbatim
 
 type Generator struct {

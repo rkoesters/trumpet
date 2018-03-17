@@ -1,3 +1,4 @@
+// Package markov provides a trumpet.Generator that uses markov chains.
 package markov
 
 // modified from https://golang.org/doc/codewalk/markov/
