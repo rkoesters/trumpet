@@ -13,5 +13,5 @@ func (g *Generator) Train(s string) {
 }
 
 func (g *Generator) Generate(maxLength int) string {
-	panic("count.Generate")
+	panic("count can't generate")
 }
