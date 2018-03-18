@@ -72,7 +72,7 @@ func main() {
 	}
 }
 
-func composeTweets(gen trumpet.Generator, sched *sametime.Scheduler, checker *verbatim.Generator) <-chan string {
+func composeTweets(gen trumpet.Generator, sched trumpet.Scheduler, checker *verbatim.Generator) <-chan string {
 	c := make(chan string)
 	go func() {
 		for {
