@@ -13,7 +13,7 @@ Configuration
 
 Trumpet needs to be configured to connect to Twitter. You will need a
 consumer key, a consumer secret, an access token, and an access secret.
-See:
+See
 <https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html>
 for more information.
 
