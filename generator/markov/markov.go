@@ -9,6 +9,7 @@ import (
 	"io"
 	"math/rand"
 	"strings"
+	"sync"
 )
 
 type Prefix []string
@@ -25,16 +26,21 @@ func (p Prefix) Shift(word string) {
 type Chain struct {
 	chain     map[string][]string
 	prefixLen int
+	mutex     *sync.Mutex
 }
 
 func NewChain(prefixLen int) *Chain {
 	return &Chain{
 		chain:     make(map[string][]string),
 		prefixLen: prefixLen,
+		mutex:     new(sync.Mutex),
 	}
 }
 
 func (c *Chain) Train(s string) {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	c.build(strings.NewReader(s))
 }
 
@@ -73,6 +79,9 @@ func (c *Chain) generateWords(n int) []string {
 }
 
 func (c *Chain) Generate(maxLength int) string {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	for {
 		numWords := maxLength / 6
 		words := c.generateWords(numWords)
