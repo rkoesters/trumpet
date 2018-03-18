@@ -11,22 +11,22 @@ else
 fi
 
 printf 'Consumer Key: '
-read -r consumerkey
+read -r consumer_key
 
 printf 'Consumer Secret: '
-read -r consumersecret
+read -r consumer_secret
 
 printf 'Access Token: '
-read -r accesstoken
+read -r access_token
 
 printf 'Access Secret: '
-read -r accesssecret
+read -r access_secret
 
 {
-	echo "consumer-key=$consumerkey"
-	echo "consumer-secret=$consumersecret"
-	echo "access-token=$accesstoken"
-	echo "access-secret=$accesssecret"
+	echo "consumer-key=$consumer_key"
+	echo "consumer-secret=$consumer_secret"
+	echo "access-token=$access_token"
+	echo "access-secret=$access_secret"
 } >"$output_file"
 
 echo "Configuration written to '$output_file'."
