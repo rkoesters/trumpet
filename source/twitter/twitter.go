@@ -27,6 +27,7 @@ func Init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer file.Close()
 
 	kf, err := keyfile.New(file)
 	if err != nil {
