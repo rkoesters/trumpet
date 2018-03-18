@@ -35,10 +35,10 @@ func NewChain(prefixLen int) *Chain {
 }
 
 func (c *Chain) Train(s string) {
-	c.Build(strings.NewReader(s))
+	c.build(strings.NewReader(s))
 }
 
-func (c *Chain) Build(r io.Reader) {
+func (c *Chain) build(r io.Reader) {
 	br := bufio.NewReader(r)
 	p := make(Prefix, c.prefixLen)
 	for {
@@ -55,7 +55,7 @@ func (c *Chain) Build(r io.Reader) {
 	}
 }
 
-func (c *Chain) GenerateWords(n int) []string {
+func (c *Chain) generateWords(n int) []string {
 	var words []string
 
 	p := make(Prefix, c.prefixLen)
@@ -75,7 +75,7 @@ func (c *Chain) GenerateWords(n int) []string {
 func (c *Chain) Generate(maxLength int) string {
 	for {
 		numWords := maxLength / 6
-		words := c.GenerateWords(numWords)
+		words := c.generateWords(numWords)
 		text := strings.Join(words, " ")
 		if len(text) <= maxLength {
 			return text
