@@ -2,7 +2,7 @@ GO         = go
 BUILDFLAGS = -v
 DEPS       = $(shell tools/list-deps.sh ./...)
 
-all: build
+all: deps build
 
 build:
 	$(GO) build $(BUILDFLAGS) ./...
@@ -11,7 +11,10 @@ build:
 deps:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
 
+config:
+	tools/make-config.sh
+
 clean:
 	$(GO) clean ./...
 
-.PHONY: all build deps clean
+.PHONY: all build clean config deps
