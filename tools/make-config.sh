@@ -2,7 +2,7 @@
 set -e
 
 usage() {
-	echo "Usage: $0 OUTPUT_FILE"
+	echo "Usage: $0 [OUTPUT_FILE]"
 }
 
 if [ $# -eq 0 ]; then
