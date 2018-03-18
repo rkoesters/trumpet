@@ -29,3 +29,5 @@ read -r accesssecret
 	echo "access-token=$accesstoken"
 	echo "access-secret=$accesssecret"
 } >"$output_file"
+
+echo "Configuration written to '$output_file'."

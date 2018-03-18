@@ -5,7 +5,6 @@ DEPS       = $(shell tools/list-deps.sh ./...)
 all: deps build
 
 build:
-	$(GO) build $(BUILDFLAGS) ./...
 	cd cmd/trumpet && $(GO) build $(BUILDFLAGS)
 
 deps:
