@@ -9,4 +9,7 @@ all:
 deps:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
 
-.PHONY: all deps
+clean:
+	$(GO) clean ./...
+
+.PHONY: all deps clean
