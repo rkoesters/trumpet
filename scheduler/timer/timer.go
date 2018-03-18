@@ -1,5 +1,5 @@
 // Package timer provides a trumpet.Scheduler that schedules tweets
-// to go out at the same time Train is called.
+// to go out repeatedly on a timer.
 package timer
 
 import (
