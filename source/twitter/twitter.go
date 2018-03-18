@@ -3,31 +3,44 @@ package twitter
 import (
 	"flag"
 	"github.com/rkoesters/trumpet"
+	"github.com/rkoesters/xdg/keyfile"
 	"gopkg.in/ChimeraCoder/anaconda.v2"
 	"html"
 	"log"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
 var (
-	consumerKey    = flag.String("consumer-key", "oopq6UwfpkDynEg4Ki6AufyQ3", "twitter consumer key")
-	consumerSecret = flag.String("consumer-secret", "QBu5KygNsDEsXJb7Q4ZlIObFsAHpkX3dHoNwQxmkDwSYrAkUYu", "twitter consumer secret")
-	accessToken    = flag.String("access-token", "917604710558953474-DBZCatP09K1PF6bjD9I1e7oZfzRTO8s", "twitter access token")
-	accessSecret   = flag.String("access-secret", "MxX9jOMwX0tCegCJYh7SHHLOXM5FHFOth8NL7NozIf7lV", "twitter access secret")
-
-	live = flag.Bool("live", false, "send tweets to twitter instead of printing them to stdout")
+	configFile = flag.String("f", "trumpet.conf", "file to read twitter configuration from")
+	live       = flag.Bool("live", false, "send tweets to twitter instead of printing them to stdout")
 )
 
 var twitter *anaconda.TwitterApi
 
 // Init prepares the twitter variable for use.
 func Init() {
-	anaconda.SetConsumerKey(*consumerKey)
-	anaconda.SetConsumerSecret(*consumerSecret)
-	twitter = anaconda.NewTwitterApi(*accessToken, *accessSecret)
+	file, err := os.Open(*configFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	kf, err := keyfile.New(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	consumerKey := kf.Value("", "consumer-key")
+	consumerSecret := kf.Value("", "consumer-secret")
+	accessToken := kf.Value("", "access-token")
+	accessSecret := kf.Value("", "access-secret")
+
+	anaconda.SetConsumerKey(consumerKey)
+	anaconda.SetConsumerSecret(consumerSecret)
+	twitter = anaconda.NewTwitterApi(accessToken, accessSecret)
 	twitter.SetLogger(anaconda.BasicLogger)
 	ok, err := twitter.VerifyCredentials()
 	// ok should be set to false if err != nil, but we are checking

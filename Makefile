@@ -6,6 +6,7 @@ all: build
 
 build:
 	$(GO) build $(BUILDFLAGS) ./...
+	(cd cmd/trumpet && $(GO) build $(BUILDFLAGS))
 
 deps:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)

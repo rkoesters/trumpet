@@ -5,12 +5,14 @@ usage() {
 	echo "Usage: $0 OUTPUT_FILE"
 }
 
-if [ $# -ne 1 ]; then
+if [ $# -eq 0 ]; then
+	output_file="trumpet.conf"
+elif [ $# -eq 1 ]; then
+	output_file="$1"
+else
 	usage >&2
 	exit 1
 fi
-
-output_file="$1"
 
 printf 'Consumer Key: '
 read -r consumerkey
