@@ -4,10 +4,12 @@ import (
 	"flag"
 	"github.com/rkoesters/trumpet"
 	"github.com/rkoesters/trumpet/generator/count"
+	"github.com/rkoesters/trumpet/generator/dummy"
 	"github.com/rkoesters/trumpet/generator/markov"
 	"github.com/rkoesters/trumpet/generator/multi"
 	"github.com/rkoesters/trumpet/generator/verbatim"
 	"github.com/rkoesters/trumpet/scheduler/sametime"
+	"github.com/rkoesters/trumpet/scheduler/timer"
 	"github.com/rkoesters/trumpet/source/twitter"
 	"log"
 	"math/rand"
@@ -16,54 +18,87 @@ import (
 )
 
 var (
-	chainLength = flag.Int("chain-length", 3, "length of each prefix in the markov chain")
+	generator = flag.String("generator", "markov", "name of the generator to use")
+	scheduler = flag.String("scheduler", "sametime", "name of the scheduler to use")
+
+	markovLength = flag.Int("markov-length", 3, "length of each prefix for the markov generator")
+	timerFreq    = flag.Duration("timer-freq", time.Minute, "frequency for the timer scheduler")
 )
 
 func main() {
 	flag.Parse()
 
+	// We don't take any arguments, only flags.
 	if flag.NArg() != 0 {
 		flag.Usage()
 		os.Exit(1)
 	}
 
+	// Seed the random number generator.
 	rand.Seed(time.Now().Unix())
 
+	// Use multi.Generator to multiplex our training data over multiple
+	// trumpet.Generators.
+	m := multi.New()
+
+	// Use count.Generator to keep track of our input size.
+	counter := count.New()
+	m.AddTrainer(counter)
+
+	// Use verbatim.Generator to make sure we don't copy a tweet
+	// verbatim.
+	duplicateChecker := verbatim.New()
+	m.AddTrainer(duplicateChecker)
+
+	// Pick our generator.
+	var gen trumpet.Generator
+	switch *generator {
+	case "dummy":
+		gen = &dummy.Generator{}
+	case "markov":
+		gen = markov.NewChain(*markovLength)
+	default:
+		log.Fatalf("unknown generator: %v", *generator)
+	}
+	m.AddTrainer(gen)
+	m.SetGenerator(gen)
+
+	// Pick our scheduler.
+	var sched trumpet.Scheduler
+	switch *scheduler {
+	case "timer":
+		sched = timer.New(*timerFreq)
+	case "sametime":
+		sched = sametime.New()
+	default:
+		log.Fatalf("unknown scheduler: %v", *scheduler)
+	}
+
+	// Prepare the twitter layer.
 	twitter.Init()
 
+	// Get list of user IDs to learn from.
 	userIDs, err := twitter.GetFriends()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	c := make(chan string)
-
-	gen := multi.New()
-
-	brain := markov.NewChain(*chainLength)
-	gen.AddTrainer(brain)
-	gen.SetGenerator(brain)
-
-	counter := count.New()
-	gen.AddTrainer(counter)
-
-	duplicateChecker := verbatim.New()
-	gen.AddTrainer(duplicateChecker)
-
-	sched := sametime.New()
-
+	// Start fetching our input.
+	incomingTweets := make(chan string)
 	for _, userID := range userIDs {
-		go twitter.GetPastTweets(userID, c)
+		go twitter.GetPastTweets(userID, incomingTweets)
 	}
-	go twitter.ListenForTweets(userIDs, c, sched)
+	go twitter.ListenForTweets(userIDs, incomingTweets, sched)
 
-	outgoingTweets := composeTweets(gen, sched, duplicateChecker)
+	// Start writing tweets according to our scheduler.
+	outgoingTweets := composeTweets(m, sched, duplicateChecker)
 
+	// Main loop.
 	for {
 		select {
-		case t := <-c:
+		case t := <-incomingTweets:
 			log.Printf("IN(((%v)))", t)
-			gen.Train(t)
+			m.Train(t)
 			log.Printf("input size: %v", *counter)
 		case t := <-outgoingTweets:
 			log.Printf("OUT(((%v)))", t)
