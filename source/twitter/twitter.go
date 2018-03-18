@@ -2,8 +2,8 @@ package twitter
 
 import (
 	"flag"
-	"github.com/ChimeraCoder/anaconda"
 	"github.com/rkoesters/trumpet"
+	"gopkg.in/ChimeraCoder/anaconda.v2"
 	"html"
 	"log"
 	"net/url"
