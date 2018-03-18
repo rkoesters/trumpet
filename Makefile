@@ -2,9 +2,10 @@ GO         = go
 BUILDFLAGS = -v
 DEPS       = $(shell tools/list-deps.sh ./...)
 
-all:
+all: build
+
+build:
 	$(GO) build $(BUILDFLAGS) ./...
-	(cd cmd/trumpet && $(GO) build $(BUILDFLAGS))
 
 deps:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
@@ -12,4 +13,4 @@ deps:
 clean:
 	$(GO) clean ./...
 
-.PHONY: all deps clean
+.PHONY: all build deps clean
