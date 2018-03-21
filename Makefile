@@ -4,7 +4,7 @@ DEPS       = $(shell tools/list-deps.sh ./...)
 
 all: build
 
-build: deps
+build:
 	cd cmd/trumpet && $(GO) build $(BUILDFLAGS)
 
 clean:
@@ -16,7 +16,7 @@ config:
 deps:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
 
-test: deps
+test:
 	$(GO) test ./...
 
 .PHONY: all build clean config deps test
