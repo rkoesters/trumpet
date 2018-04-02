@@ -8,6 +8,7 @@ import (
 	"github.com/rkoesters/trumpet/generator/markov"
 	"github.com/rkoesters/trumpet/generator/multi"
 	"github.com/rkoesters/trumpet/generator/verbatim"
+	"github.com/rkoesters/trumpet/scheduler/noop"
 	"github.com/rkoesters/trumpet/scheduler/sametime"
 	"github.com/rkoesters/trumpet/scheduler/timer"
 	"github.com/rkoesters/trumpet/source/twitter"
@@ -86,7 +87,11 @@ func main() {
 	// Start fetching our input.
 	incomingTweets := make(chan string)
 	for _, userID := range userIDs {
-		go twitter.GetPastTweets(userID, incomingTweets)
+		if *scheduler == "sametime" {
+			go twitter.GetPastTweets(userID, incomingTweets, noop.New())
+		} else {
+			go twitter.GetPastTweets(userID, incomingTweets, sched)
+		}
 	}
 	go twitter.ListenForTweets(userIDs, incomingTweets, sched)
 

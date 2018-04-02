@@ -77,7 +77,7 @@ func Tweet(s string) {
 
 	_, err := twitter.PostTweet(s, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error posting tweet '%v': %v", s, err)
 	}
 }
 
@@ -97,7 +97,7 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 
 const PAST_TWEET_REQUESTS = 25
 
-func GetPastTweets(userID string, c chan<- string) {
+func GetPastTweets(userID string, c chan<- string, sched trumpet.Scheduler) {
 	var last string
 	for i := 0; i < PAST_TWEET_REQUESTS; i++ {
 		v := url.Values{}
@@ -115,6 +115,12 @@ func GetPastTweets(userID string, c chan<- string) {
 			if t.IdStr != last && isGoodTweet(t, []string{userID}) {
 				c <- html.UnescapeString(t.Text)
 				last = t.IdStr
+				created, err := t.CreatedAtTime()
+				if err != nil {
+					log.Printf("GetPastTweets: %v", err)
+				} else {
+					sched.Train(created)
+				}
 			}
 		}
 	}
