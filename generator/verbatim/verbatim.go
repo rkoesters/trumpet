@@ -3,6 +3,10 @@
 // identical to any piece of training data.
 package verbatim
 
+import (
+	"strings"
+)
+
 type Generator struct {
 	m map[string]struct{}
 }
@@ -12,7 +16,7 @@ func New() *Generator {
 }
 
 func (g *Generator) Train(s string) {
-	g.m[s] = struct{}{}
+	g.m[normalize(s)] = struct{}{}
 }
 
 func (g *Generator) Generate(maxLength int) string {
@@ -22,4 +26,8 @@ func (g *Generator) Generate(maxLength int) string {
 func (g *Generator) Exists(s string) bool {
 	_, ok := g.m[s]
 	return ok
+}
+
+func normalize(s string) string {
+	return strings.Join(strings.Fields(s), " ")
 }
