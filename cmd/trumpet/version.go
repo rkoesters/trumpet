@@ -1,0 +1,18 @@
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+var version = "undefined"
+
+func Version() string {
+	return fmt.Sprintf(
+		"trumpet version %v (%v %v/%v)",
+		version,
+		runtime.Version(),
+		runtime.GOOS,
+		runtime.GOARCH,
+	)
+}

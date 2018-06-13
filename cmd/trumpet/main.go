@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/rkoesters/trumpet"
 	"github.com/rkoesters/trumpet/generator/count"
 	"github.com/rkoesters/trumpet/generator/dummy"
@@ -24,6 +25,8 @@ var (
 
 	markovLength = flag.Int("markov-length", 3, "length of each prefix for the markov generator")
 	timerFreq    = flag.Duration("timer-freq", time.Minute, "frequency for the timer scheduler")
+
+	showVersion = flag.Bool("version", false, "Print version information and exit.")
 )
 
 func main() {
@@ -33,6 +36,11 @@ func main() {
 	if flag.NArg() != 0 {
 		flag.Usage()
 		os.Exit(1)
+	}
+
+	if *showVersion {
+		fmt.Println(Version())
+		os.Exit(0)
 	}
 
 	// Seed the random number generator.
