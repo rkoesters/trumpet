@@ -21,6 +21,6 @@ deps:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
 
 test:
-	$(GO) test ./...
+	$(GO) test -cover -race ./...
 
 .PHONY: all build clean config deps test
