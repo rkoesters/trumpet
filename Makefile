@@ -1,5 +1,5 @@
 GO         = go
-BUILDFLAGS =
+BUILDFLAGS = -ldflags="-X main.version=$(VERSION)"
 DEPS       = $(shell tools/list-deps.sh ./...)
 VERSION    = $(shell git describe --always --dirty)
 
@@ -8,7 +8,10 @@ EXECNAME = trumpet
 all: build
 
 build:
-	$(GO) build $(BUILDFLAGS) -ldflags="-X main.version=$(VERSION)" -o $(EXECNAME) ./cmd/trumpet
+	$(GO) build $(BUILDFLAGS) -o $(EXECNAME) ./cmd/trumpet
+
+install:
+	$(GO) install $(BUILDFLAGS) ./cmd/trumpet
 
 clean:
 	$(GO) clean ./...
@@ -23,4 +26,4 @@ deps:
 test:
 	$(GO) test -cover -race ./...
 
-.PHONY: all build clean config deps test
+.PHONY: all build install clean config deps test
