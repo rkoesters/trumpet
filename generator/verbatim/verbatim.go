@@ -9,8 +9,8 @@ import (
 )
 
 type Generator struct {
-	m   map[string]struct{}
-	mtx sync.Mutex
+	m     map[string]struct{}
+	mutex sync.Mutex
 }
 
 func New() *Generator {
@@ -20,8 +20,8 @@ func New() *Generator {
 }
 
 func (g *Generator) Train(s string) {
-	g.mtx.Lock()
-	defer g.mtx.Unlock()
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
 
 	g.m[normalize(s)] = struct{}{}
 }
@@ -31,8 +31,8 @@ func (g *Generator) Generate(maxLength int) string {
 }
 
 func (g *Generator) Exists(s string) bool {
-	g.mtx.Lock()
-	defer g.mtx.Unlock()
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
 
 	_, ok := g.m[s]
 	return ok
