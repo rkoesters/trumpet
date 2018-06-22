@@ -7,6 +7,7 @@ import (
 
 var version = "undefined"
 
+// Version returns the version string for this binary.
 func Version() string {
 	return fmt.Sprintf(
 		"trumpet version %v (%v %v/%v)",
