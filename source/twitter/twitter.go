@@ -3,6 +3,7 @@ package twitter
 import (
 	"flag"
 	"github.com/rkoesters/trumpet"
+	"github.com/rkoesters/trumpet/source/twitter/logger"
 	"github.com/rkoesters/xdg/keyfile"
 	"gopkg.in/ChimeraCoder/anaconda.v2"
 	"html"
@@ -42,7 +43,7 @@ func Init() {
 	anaconda.SetConsumerKey(consumerKey)
 	anaconda.SetConsumerSecret(consumerSecret)
 	twitter = anaconda.NewTwitterApi(accessToken, accessSecret)
-	twitter.SetLogger(anaconda.BasicLogger)
+	twitter.SetLogger(logger.New(logger.LevelInfo))
 	ok, err := twitter.VerifyCredentials()
 	// ok should be set to false if err != nil, but we are checking
 	// both just in case behavior changes.
