@@ -1,34 +1,36 @@
 GO         = go
-BUILDFLAGS = -ldflags="-X main.version=$(VERSION)"
-DEPS       = $(shell tools/list-deps.sh ./...)
-VERSION    = $(shell git describe --always --dirty)
+BUILDFLAGS =
+LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
+TESTFLAGS  = -cover -race
 
 EXECNAME = trumpet
+DEPS     = $(shell tools/list-deps.sh ./...)
+VERSION  = $(shell git describe --always --dirty)
 
 all: build
 
+deps:
+	$(GO) get -u $(BUILDFLAGS) golang.org/x/lint/golint
+	$(GO) get -u $(BUILDFLAGS) $(DEPS)
+
 build:
-	$(GO) build $(BUILDFLAGS) -o $(EXECNAME) ./cmd/trumpet
+	$(GO) build -o $(EXECNAME) $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
+
+install:
+	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
 
 check:
-	go fmt ./...
+	$(GO) fmt ./...
 	golint -set_exit_status ./...
 
-clean:
-	$(GO) clean ./...
-	rm -f $(EXECNAME)
+test:
+	$(GO) test $(TESTFLAGS) ./...
 
 config:
 	tools/make-config.sh
 
-deps:
-	$(GO) get -u golang.org/x/lint/golint
-	$(GO) get -u $(BUILDFLAGS) $(DEPS)
-
-install:
-	$(GO) install $(BUILDFLAGS) ./cmd/trumpet
-
-test:
-	$(GO) test -cover -race ./...
+clean:
+	$(GO) clean ./...
+	rm -f $(EXECNAME)
 
 .PHONY: all build check clean config deps install test
