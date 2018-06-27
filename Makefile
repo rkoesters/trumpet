@@ -1,7 +1,7 @@
 GO         = go
 BUILDFLAGS =
 LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
-TESTFLAGS  = -cover -race
+TESTFLAGS  = -cover
 
 EXECNAME = trumpet
 DEPS     = $(shell tools/list-deps.sh ./...)
