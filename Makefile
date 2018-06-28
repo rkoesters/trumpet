@@ -3,22 +3,19 @@ BUILDFLAGS =
 LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
 TESTFLAGS  = -cover
 
-EXECNAME = trumpet
-SOURCES  = $(shell find . -type f -name '*.go')
-DEPS     = $(shell tools/list-deps.sh ./...)
-VERSION  = $(shell git describe --always --dirty)
+CMDS    = $(shell ls cmd)
+SOURCES = $(shell find . -type f -name '*.go')
+DEPS    = $(shell tools/list-deps.sh ./...)
+VERSION = $(shell git describe --always --dirty)
 
-all: $(EXECNAME)
+all: $(CMDS)
+
+$(CMDS): Makefile $(SOURCES)
+	$(GO) build -o $@ $(BUILDFLAGS) $(LDFLAGS) ./cmd/$@
 
 deps:
 	$(GO) get -u $(BUILDFLAGS) golang.org/x/lint/golint
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
-
-$(EXECNAME): Makefile $(SOURCES)
-	$(GO) build -o $@ $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
-
-install:
-	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
 
 check:
 	$(GO) fmt ./...
@@ -27,11 +24,14 @@ check:
 test:
 	$(GO) test $(TESTFLAGS) ./...
 
+install:
+	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
+
 config:
 	tools/make-config.sh
 
 clean:
 	$(GO) clean ./...
-	rm -f $(EXECNAME)
+	rm -f $(CMDS)
 
 .PHONY: all check clean config deps install test
