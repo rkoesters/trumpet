@@ -5,17 +5,24 @@ package verbatim
 
 import (
 	"strings"
+	"sync"
 )
 
 type Generator struct {
-	m map[string]struct{}
+	m     map[string]struct{}
+	mutex sync.Mutex
 }
 
 func New() *Generator {
-	return &Generator{make(map[string]struct{})}
+	return &Generator{
+		m: make(map[string]struct{}),
+	}
 }
 
 func (g *Generator) Train(s string) {
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
+
 	g.m[normalize(s)] = struct{}{}
 }
 
@@ -24,6 +31,9 @@ func (g *Generator) Generate(maxLength int) string {
 }
 
 func (g *Generator) Exists(s string) bool {
+	g.mutex.Lock()
+	defer g.mutex.Unlock()
+
 	_, ok := g.m[s]
 	return ok
 }

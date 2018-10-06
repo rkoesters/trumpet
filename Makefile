@@ -1,22 +1,37 @@
 GO         = go
 BUILDFLAGS =
-DEPS       = $(shell tools/list-deps.sh ./...)
+LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
+TESTFLAGS  = -cover
 
-all: build
+CMDS    = $(shell ls cmd)
+SOURCES = $(shell find . -type f -name '*.go')
+DEPS    = $(shell tools/list-deps.sh ./...)
+VERSION = $(shell git describe --always --dirty)
 
-build:
-	cd cmd/trumpet && $(GO) build $(BUILDFLAGS)
+all: $(CMDS)
 
-clean:
-	$(GO) clean ./...
+$(CMDS): Makefile $(SOURCES)
+	$(GO) build -o $@ $(BUILDFLAGS) $(LDFLAGS) ./cmd/$@
+
+deps:
+	$(GO) get -u $(BUILDFLAGS) golang.org/x/lint/golint
+	$(GO) get -u $(BUILDFLAGS) $(DEPS)
+
+check:
+	$(GO) fmt ./...
+	golint -set_exit_status ./...
+
+test:
+	$(GO) test $(TESTFLAGS) ./...
+
+install:
+	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
 
 config:
 	tools/make-config.sh
 
-deps:
-	$(GO) get -u $(BUILDFLAGS) $(DEPS)
+clean:
+	$(GO) clean ./...
+	rm -f $(CMDS)
 
-test:
-	$(GO) test ./...
-
-.PHONY: all build clean config deps test
+.PHONY: all check clean config deps install test
