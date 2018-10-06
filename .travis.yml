@@ -3,12 +3,12 @@ language: go
 go:
   - "1.6.x"
   - "1.8.x"
-  - "1.x"
+  - "1.x.x"
   - master
 
 install:
   - make deps
 
 script:
-  - make build
+  - make
   - make test
