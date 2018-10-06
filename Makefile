@@ -13,8 +13,12 @@ all: $(CMDS)
 $(CMDS): Makefile $(SOURCES)
 	$(GO) build -o $@ $(BUILDFLAGS) $(LDFLAGS) ./cmd/$@
 
-deps:
+deps: deps-golint deps-packages
+
+deps-golint:
 	$(GO) get -u $(BUILDFLAGS) golang.org/x/lint/golint
+
+deps-packages:
 	$(GO) get -u $(BUILDFLAGS) $(DEPS)
 
 check:
