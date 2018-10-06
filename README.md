@@ -3,6 +3,8 @@ Trumpet
 
 A bot that generates tweets based on the accounts it follows.
 
+[![Build Status](https://travis-ci.org/rkoesters/trumpet.svg?branch=master)](https://travis-ci.org/rkoesters/trumpet)
+
 Building
 --------
 
