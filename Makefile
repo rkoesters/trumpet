@@ -38,4 +38,4 @@ clean:
 	$(GO) clean ./...
 	rm -f $(CMDS)
 
-.PHONY: all check clean config deps install test
+.PHONY: all check clean config deps deps-golint deps-packages install test
