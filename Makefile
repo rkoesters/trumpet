@@ -5,7 +5,6 @@ TESTFLAGS  = -cover
 
 CMDS    = $(shell ls cmd)
 SOURCES = $(shell find . -type f -name '*.go')
-DEPS    = $(shell tools/list-deps.sh ./...)
 VERSION = $(shell git describe --always --dirty)
 
 all: $(CMDS)
@@ -19,7 +18,7 @@ deps-golint:
 	$(GO) get -u $(BUILDFLAGS) golang.org/x/lint/golint
 
 deps-packages:
-	$(GO) get -u $(BUILDFLAGS) $(DEPS)
+	$(GO) get -u -t $(BUILDFLAGS) ./...
 
 check:
 	$(GO) fmt ./...
@@ -29,7 +28,7 @@ test:
 	$(GO) test $(TESTFLAGS) ./...
 
 install:
-	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/trumpet
+	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/...
 
 config:
 	tools/make-config.sh
