@@ -23,16 +23,16 @@ var (
 var twitter *anaconda.TwitterApi
 
 // Init prepares the twitter variable for use.
-func Init() {
+func Init() error {
 	file, err := os.Open(*configFile)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer file.Close()
 
 	kf, err := keyfile.New(file)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	consumerKey := kf.Value("", "consumer-key")
@@ -49,8 +49,10 @@ func Init() {
 	// both just in case behavior changes.
 	if !ok || err != nil {
 		log.Print("twitter.VerifyCredentials() failed")
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }
 
 func GetFriends() ([]string, error) {
@@ -71,15 +73,14 @@ func GetFriends() ([]string, error) {
 }
 
 // Tweet posts a tweet with contents of s.
-func Tweet(s string) {
+func Tweet(s string) error {
 	if !*live {
-		return
+		// silently drop tweet.
+		return nil
 	}
 
 	_, err := twitter.PostTweet(s, nil)
-	if err != nil {
-		log.Fatalf("error posting tweet '%v': %v", s, err)
-	}
+	return err
 }
 
 // isGoodTweet returns true if the tweet was written by one of the users

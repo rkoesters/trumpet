@@ -84,7 +84,10 @@ func main() {
 	}
 
 	// Prepare the twitter layer.
-	twitter.Init()
+	err := twitter.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Get list of user IDs to learn from.
 	userIDs, err := twitter.GetFriends()
