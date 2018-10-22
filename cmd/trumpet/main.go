@@ -118,7 +118,10 @@ func main() {
 			log.Printf("input size: %v", *counter)
 		case t := <-outgoingTweets:
 			log.Printf("OUT(((%v)))", t)
-			twitter.Tweet(t)
+			err = twitter.Tweet(t)
+			if err != nil {
+				log.Print("failed posting tweet")
+			}
 		}
 	}
 }
