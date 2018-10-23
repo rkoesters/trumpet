@@ -1,4 +1,6 @@
-GO         = go
+GO     = go
+GOLINT = golint
+
 BUILDFLAGS =
 LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
 TESTFLAGS  = -cover
@@ -12,17 +14,12 @@ all: $(CMDS)
 $(CMDS): Makefile $(SOURCES)
 	$(GO) build -o $@ $(BUILDFLAGS) $(LDFLAGS) ./cmd/$@
 
-deps: deps-golint deps-packages
-
-deps-golint:
-	$(GO) get -u $(BUILDFLAGS) golang.org/x/lint/golint
-
-deps-packages:
+deps:
 	$(GO) get -u -t $(BUILDFLAGS) ./...
 
 check:
 	$(GO) fmt ./...
-	golint -set_exit_status ./...
+	$(GOLINT) -set_exit_status ./...
 
 test:
 	$(GO) test $(TESTFLAGS) ./...
@@ -37,4 +34,4 @@ clean:
 	$(GO) clean ./...
 	rm -f $(CMDS)
 
-.PHONY: all check clean config deps deps-golint deps-packages install test
+.PHONY: all check clean config deps install test
