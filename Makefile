@@ -27,6 +27,7 @@ test:
 	$(GO) test $(TESTFLAGS) ./...
 
 install: $(CMDS)
+	mkdir -p $(DESTDIR)$(bindir)
 	install $(CMDS) $(DESTDIR)$(bindir)
 
 config:
