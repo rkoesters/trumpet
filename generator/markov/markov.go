@@ -83,10 +83,14 @@ func (c *Chain) Generate(maxLength int) string {
 	defer c.mutex.Unlock()
 
 	for {
+		// Divide maxLength by 6 to guess the number of words
+		// that will satisfy our maxLength. 6 is just an
+		// estimated average word length, it might be more
+		// useful to derive that value from the corpus.
 		numWords := maxLength / 6
 		words := c.generateWords(numWords)
 		text := strings.Join(words, " ")
-		if len(text) < maxLength {
+		if len(text) <= maxLength {
 			return text
 		}
 	}
