@@ -5,6 +5,8 @@ BUILDFLAGS =
 LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
 TESTFLAGS  = -cover
 
+bindir = $(shell $(GO) env GOPATH)/bin
+
 CMDS    = $(shell ls cmd)
 SOURCES = $(shell find . -type f -name '*.go')
 VERSION = $(shell git describe --always --dirty)
@@ -24,8 +26,8 @@ check:
 test:
 	$(GO) test $(TESTFLAGS) ./...
 
-install:
-	$(GO) install $(BUILDFLAGS) $(LDFLAGS) ./cmd/...
+install: $(CMDS)
+	install $(CMDS) $(DESTDIR)$(bindir)
 
 config:
 	tools/make-config.sh
