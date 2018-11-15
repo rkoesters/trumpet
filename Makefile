@@ -27,10 +27,6 @@ check:
 test:
 	$(GO) test $(TESTFLAGS) ./...
 
-install: $(CMDS)
-	mkdir -p $(DESTDIR)$(bindir)
-	install $(CMDS) $(DESTDIR)$(bindir)
-
 config:
 	tools/make-config.sh
 
@@ -38,4 +34,11 @@ clean:
 	$(GO) clean ./...
 	rm -f $(CMDS)
 
-.PHONY: all check clean config deps install test
+install: $(CMDS)
+	mkdir -p $(DESTDIR)$(bindir)
+	install $(CMDS) $(DESTDIR)$(bindir)
+
+uninstall:
+	rm $(addprefix $(DESTDIR)$(bindir)/,$(CMDS))
+
+.PHONY: all check clean config deps install test uninstall
