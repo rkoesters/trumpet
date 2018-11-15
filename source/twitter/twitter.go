@@ -58,6 +58,8 @@ func Init() error {
 	return nil
 }
 
+// GetFriends returns a list of user IDs that are followed by the
+// account we connected with.
 func GetFriends() ([]string, error) {
 	var userIDs []string
 	var v url.Values
@@ -100,11 +102,13 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
-const PAST_TWEET_REQUESTS = 25
+const pastTweetRequests = 25
 
+// GetPastTweets grabs past tweets from the given userID and sends them
+// through c in addition to giving the times of the tweets to sched.
 func GetPastTweets(userID string, c chan<- string, sched trumpet.Scheduler) {
 	var last string
-	for i := 0; i < PAST_TWEET_REQUESTS; i++ {
+	for i := 0; i < pastTweetRequests; i++ {
 		v := url.Values{}
 		v.Set("user_id", userID)
 		v.Set("count", "200")
