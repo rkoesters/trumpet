@@ -10,8 +10,24 @@ A bot that generates tweets based on the accounts it follows.
 Building
 --------
 
+First, you will need to make sure you have the dependencies:
+
 	$ make deps
+
+Next, you are able to build the program:
+
 	$ make
+
+Installing
+----------
+
+To install to `$GOPATH/bin`:
+
+	$ make install
+
+To install to a custom location, for example `/usr/bin`:
+
+	$ sudo make install bindir=/usr/bin
 
 Configuration
 -------------
@@ -23,10 +39,10 @@ See
 for more information.
 
 Once you have the required information, you can use the trumpet-config
-tool to create the configuration file.
+tool to create the configuration file:
 
 	$ ./trumpet-config
 
-or (if you ran make install)
+or (if you ran `make install`)
 
 	$ trumpet-config
