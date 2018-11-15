@@ -3,16 +3,19 @@
 package timer
 
 import (
+	"github.com/rkoesters/trumpet"
 	"time"
 )
 
-type Scheduler struct {
+type scheduler struct {
 	ch chan struct{}
 	d  time.Duration
 }
 
-func New(d time.Duration) *Scheduler {
-	sched := &Scheduler{
+// New returns a trumpet.Scheduler that schedules a tweet for the given
+// time.Duration after each <-Chan().
+func New(d time.Duration) trumpet.Scheduler {
+	sched := &scheduler{
 		ch: make(chan struct{}),
 		d:  d,
 	}
@@ -27,8 +30,8 @@ func New(d time.Duration) *Scheduler {
 	return sched
 }
 
-func (s *Scheduler) Train(d time.Time) {}
+func (s *scheduler) Train(d time.Time) {}
 
-func (s *Scheduler) Chan() <-chan struct{} {
+func (s *scheduler) Chan() <-chan struct{} {
 	return s.ch
 }
