@@ -1,11 +1,22 @@
 // Package dummy provides a dummy trumpet.Generator.
 package dummy
 
-type Generator struct{}
+import (
+	"github.com/rkoesters/trumpet"
+)
 
-func (g *Generator) Train(s string) {}
+type generator struct{}
 
-func (g *Generator) Generate(maxLength int) string {
+// New returns a trumpet.Generator that ignores training data and only
+// generates the string "hello, world" truncated to the requested
+// length.
+func New() trumpet.Generator {
+	return new(generator)
+}
+
+func (g *generator) Train(s string) {}
+
+func (g *generator) Generate(maxLength int) string {
 	s := "hello, world"
 	if len(s) > maxLength {
 		return s[:maxLength]

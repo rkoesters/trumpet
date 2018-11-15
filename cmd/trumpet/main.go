@@ -65,7 +65,7 @@ func main() {
 	var gen trumpet.Generator
 	switch *generator {
 	case "dummy":
-		gen = &dummy.Generator{}
+		gen = dummy.New()
 	case "markov":
 		gen = markov.NewChain(*markovLength)
 	default:
