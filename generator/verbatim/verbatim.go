@@ -8,17 +8,23 @@ import (
 	"sync"
 )
 
+// Generator is a trumpet.Generator that keeps track of training data.
+// Exist can be called to check whether a string has been given to the
+// Generator.
 type Generator struct {
 	m     map[string]struct{}
 	mutex sync.Mutex
 }
 
+// New returns a *Generator.
 func New() *Generator {
 	return &Generator{
 		m: make(map[string]struct{}),
 	}
 }
 
+// Train adds the given string to the Generator's internal data
+// structure of strings.
 func (g *Generator) Train(s string) {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
@@ -26,10 +32,13 @@ func (g *Generator) Train(s string) {
 	g.m[normalize(s)] = struct{}{}
 }
 
+// Generate panics.
 func (g *Generator) Generate(maxLength int) string {
 	panic("verbatim can't generate")
 }
 
+// Exists returns a bool indicating whether the given string has already
+// been given to Train.
 func (g *Generator) Exists(s string) bool {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
