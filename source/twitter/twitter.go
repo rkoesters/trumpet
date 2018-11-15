@@ -1,3 +1,6 @@
+// Package twitter is the layer that connects trumpet to Twitter so that
+// other parts of the program don't need to directly interact with the
+// Twitter API.
 package twitter
 
 import (
