@@ -2,21 +2,22 @@
 package noop
 
 import (
+	"github.com/rkoesters/trumpet"
 	"time"
 )
 
-type generator struct {
+type scheduler struct {
 	ch chan struct{}
 }
 
 // New returns a trumpet.Scheduler that doesn't do anything. It returns
 // a valid channel, but nothing will ever be sent over that channel.
-func New() trumpet.Generator {
-	return &generator{
+func New() trumpet.Scheduler {
+	return &scheduler{
 		ch: make(chan struct{}),
 	}
 }
 
-func (g *generator) Train(d time.Time) {}
+func (g *scheduler) Train(d time.Time) {}
 
-func (g *generator) Chan() <-chan struct{} { return g.ch }
+func (g *scheduler) Chan() <-chan struct{} { return g.ch }
