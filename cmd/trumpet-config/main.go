@@ -1,4 +1,4 @@
-// trumpet-config is an interactive
+// trumpet-config is an interactive trumpet configuration creation tool.
 package main
 
 import (
