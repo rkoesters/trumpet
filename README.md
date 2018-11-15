@@ -27,7 +27,7 @@ To install to `$GOPATH/bin`:
 
 To install to a custom location, for example `/usr/local/bin`:
 
-	$ sudo make install bindir=/usr/local/bin
+	$ sudo make install prefix=/usr/local
 
 Configuration
 -------------

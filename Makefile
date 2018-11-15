@@ -5,7 +5,8 @@ BUILDFLAGS =
 LDFLAGS    = -ldflags="-X main.version=$(VERSION)"
 TESTFLAGS  = -cover
 
-bindir = $(shell $(GO) env GOPATH)/bin
+prefix = $(shell $(GO) env GOPATH)
+bindir = $(prefix)/bin
 
 CMDS    = $(shell ls cmd)
 SOURCES = $(shell find . -type f -name '*.go')
