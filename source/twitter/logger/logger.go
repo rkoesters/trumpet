@@ -1,3 +1,5 @@
+// Package logger provides a simple anaconda.Logger that uses the
+// standard library's log package.
 package logger
 
 import (
