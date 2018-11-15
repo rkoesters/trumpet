@@ -13,7 +13,7 @@ VERSION = $(shell git describe --always --dirty)
 
 all: $(CMDS)
 
-$(CMDS): Makefile $(SOURCES)
+$(CMDS): $(SOURCES) Makefile
 	$(GO) build -o $@ $(BUILDFLAGS) $(LDFLAGS) ./cmd/$@
 
 deps:
