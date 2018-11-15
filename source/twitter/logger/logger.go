@@ -7,6 +7,9 @@ import (
 	"log"
 )
 
+// New returns an anaconda.Logger that uses the standard library's log
+// package while only printing messages that are at least the given log
+// level.
 func New(level uint) anaconda.Logger {
 	return &logger{
 		level: level,
