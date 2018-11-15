@@ -7,7 +7,7 @@ go:
   - "1.x"    # latest release
 
 install:
-  - go get -u golang.org/x/lint/golint
+  - go get -u golang.org/x/lint/golint || true
   - make deps
 
 script:
