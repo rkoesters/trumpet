@@ -27,9 +27,6 @@ check:
 test:
 	$(GO) test $(TESTFLAGS) ./...
 
-config:
-	tools/make-config.sh
-
 clean:
 	$(GO) clean ./...
 	rm -f $(CMDS)
@@ -41,4 +38,4 @@ install: $(CMDS)
 uninstall:
 	rm $(addprefix $(DESTDIR)$(bindir)/,$(CMDS))
 
-.PHONY: all check clean config deps install test uninstall
+.PHONY: all check clean deps install test uninstall
