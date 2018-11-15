@@ -5,16 +5,18 @@ import (
 	"time"
 )
 
-type Generator struct {
+type generator struct {
 	ch chan struct{}
 }
 
-func New() *Generator {
-	return &Generator{
+// New returns a trumpet.Scheduler that doesn't do anything. It returns
+// a valid channel, but nothing will ever be sent over that channel.
+func New() trumpet.Generator {
+	return &generator{
 		ch: make(chan struct{}),
 	}
 }
 
-func (g *Generator) Train(d time.Time) {}
+func (g *generator) Train(d time.Time) {}
 
-func (g *Generator) Chan() <-chan struct{} { return g.ch }
+func (g *generator) Chan() <-chan struct{} { return g.ch }
