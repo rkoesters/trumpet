@@ -13,3 +13,5 @@ script:
   - make
   - make check
   - make test
+  - make install
+  - make uninstall
