@@ -10,8 +10,8 @@ install:
   - make deps
 
 script:
-  - make
   - make check
+  - make
   - make test
   - make install
   - make uninstall
