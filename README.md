@@ -22,4 +22,11 @@ See
 <https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html>
 for more information.
 
-	$ make config
+Once you have the required information, you can use the trumpet-config
+tool to create the configuration file.
+
+	$ ./trumpet-config
+
+or (if you ran make install)
+
+	$ trumpet-config
