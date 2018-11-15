@@ -11,4 +11,5 @@ install:
 
 script:
   - make
+  - make check
   - make test
