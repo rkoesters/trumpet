@@ -1,7 +1,7 @@
 // trumpet is a bot that generates tweets based on the accounts it
 // follows. For usage information, run:
 //
-//	trumpet -help
+//	$ trumpet -help
 package main
 
 import (
