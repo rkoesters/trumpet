@@ -62,28 +62,12 @@ func main() {
 	m.AddTrainer(duplicateChecker)
 
 	// Pick our generator.
-	var gen trumpet.Generator
-	switch *generator {
-	case "dummy":
-		gen = dummy.New()
-	case "markov":
-		gen = markov.NewChain(*markovLength)
-	default:
-		log.Fatalf("unknown generator: %v", *generator)
-	}
+	gen := pickGenerator()
 	m.AddTrainer(gen)
 	m.SetGenerator(gen)
 
 	// Pick our scheduler.
-	var sched trumpet.Scheduler
-	switch *scheduler {
-	case "timer":
-		sched = timer.New(*timerFreq)
-	case "sametime":
-		sched = sametime.New()
-	default:
-		log.Fatalf("unknown scheduler: %v", *scheduler)
-	}
+	sched := pickScheduler()
 
 	// Prepare the twitter layer.
 	err := twitter.Init()
@@ -144,4 +128,34 @@ func composeTweets(gen trumpet.Generator, sched trumpet.Scheduler, checker *verb
 		}
 	}()
 	return c
+}
+
+func pickGenerator() trumpet.Generator {
+	switch *generator {
+	case "dummy":
+		return dummy.New()
+	case "markov":
+		return markov.NewChain(*markovLength)
+	default:
+		log.Fatalf("unknown generator: %v", *generator)
+
+		// Won't be reached, but log.Fatal isn't recognized as a
+		// valid way to end a function that returns a value.
+		return nil
+	}
+}
+
+func pickScheduler() trumpet.Scheduler {
+	switch *scheduler {
+	case "timer":
+		return timer.New(*timerFreq)
+	case "sametime":
+		return sametime.New()
+	default:
+		log.Fatalf("unknown scheduler: %v", *scheduler)
+
+		// Won't be reached, but log.Fatal isn't recognized as a
+		// valid way to end a function that returns a value.
+		return nil
+	}
 }
