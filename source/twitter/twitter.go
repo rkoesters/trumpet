@@ -102,11 +102,11 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 	return true
 }
 
-const pastTweetRequests = 25
-
 // GetPastTweets grabs past tweets from the given userIDs and sends them
 // through c in addition to giving the times of the tweets to sched.
 func GetPastTweets(userIDs []string, c chan<- string, sched trumpet.Scheduler) {
+	const pastTweetRequests = 25
+
 	for _, userID := range userIDs {
 		var last string
 		for i := 0; i < pastTweetRequests; i++ {
