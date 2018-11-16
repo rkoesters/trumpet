@@ -46,3 +46,8 @@ tool to create the configuration file:
 or (if you ran `make install`)
 
 	$ trumpet-config
+
+License
+-------
+
+See [LICENSE](LICENSE).
