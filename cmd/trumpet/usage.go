@@ -6,15 +6,14 @@ import (
 	"os"
 )
 
-func usage() {
-	out := flag.CommandLine.Output()
+func init() { flag.Usage = usage }
 
-	fmt.Fprintf(out, "Usage: %v [FLAGS...]\n", os.Args[0])
-	fmt.Fprintln(out)
-	fmt.Fprintln(out, "Flags:")
+func usage() {
+	fmt.Fprintf(os.Stderr, usageMessage, os.Args[0])
 	flag.PrintDefaults()
 }
 
-func init() {
-	flag.Usage = usage
-}
+const usageMessage = `Usage: %v [FLAGS...]
+
+Flags:
+`
