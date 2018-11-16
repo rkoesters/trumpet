@@ -83,12 +83,14 @@ func main() {
 
 	// Start fetching our input.
 	incomingTweets := make(chan string)
-	for _, userID := range userIDs {
-		if *scheduler == "sametime" {
-			go twitter.GetPastTweets(userID, incomingTweets, noop.New())
-		} else {
-			go twitter.GetPastTweets(userID, incomingTweets, sched)
-		}
+	if *scheduler == "sametime" {
+		// The sametime scheduler will attempt to schedule a
+		// bunch of tweets when we are retrieving old tweets. We
+		// don't want that so we use a noop scheduler for
+		// GetPastTweets instead.
+		go twitter.GetPastTweets(userIDs, incomingTweets, noop.New())
+	} else {
+		go twitter.GetPastTweets(userIDs, incomingTweets, sched)
 	}
 	go twitter.ListenForTweets(userIDs, incomingTweets, sched)
 

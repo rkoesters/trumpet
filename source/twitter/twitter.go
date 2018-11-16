@@ -104,31 +104,35 @@ func isGoodTweet(t anaconda.Tweet, userIDs []string) bool {
 
 const pastTweetRequests = 25
 
-// GetPastTweets grabs past tweets from the given userID and sends them
+// GetPastTweets grabs past tweets from the given userIDs and sends them
 // through c in addition to giving the times of the tweets to sched.
-func GetPastTweets(userID string, c chan<- string, sched trumpet.Scheduler) {
-	var last string
-	for i := 0; i < pastTweetRequests; i++ {
-		v := url.Values{}
-		v.Set("user_id", userID)
-		v.Set("count", "200")
-		v.Set("exclude_replies", "true")
-		if last != "" {
-			v.Set("max_id", last)
-		}
-		timeline, err := twitter.GetUserTimeline(v)
-		if err != nil {
-			log.Fatal(err)
-		}
-		for _, t := range timeline {
-			if t.IdStr != last && isGoodTweet(t, []string{userID}) {
-				c <- html.UnescapeString(t.Text)
-				last = t.IdStr
-				created, err := t.CreatedAtTime()
-				if err != nil {
-					log.Printf("GetPastTweets: %v", err)
-				} else {
-					sched.Train(created)
+func GetPastTweets(userIDs []string, c chan<- string, sched trumpet.Scheduler) {
+	for _, userID := range userIDs {
+		var last string
+		for i := 0; i < pastTweetRequests; i++ {
+			v := url.Values{}
+			v.Set("user_id", userID)
+			v.Set("count", "200")
+			v.Set("exclude_replies", "true")
+			if last != "" {
+				v.Set("max_id", last)
+			}
+
+			timeline, err := twitter.GetUserTimeline(v)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			for _, t := range timeline {
+				if t.IdStr != last && isGoodTweet(t, []string{userID}) {
+					c <- html.UnescapeString(t.Text)
+					last = t.IdStr
+					created, err := t.CreatedAtTime()
+					if err != nil {
+						log.Printf("GetPastTweets: %v", err)
+					} else {
+						sched.Train(created)
+					}
 				}
 			}
 		}
