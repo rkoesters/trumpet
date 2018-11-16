@@ -8,6 +8,7 @@ import (
 	"github.com/rkoesters/trumpet/source/twitter/logger"
 	"gopkg.in/ChimeraCoder/anaconda.v2"
 	"os"
+	"strings"
 )
 
 var (
@@ -46,19 +47,19 @@ func getInput() (ckey, csecret, atoken, asecret string) {
 
 	fmt.Print("Consumer Key: ")
 	sc.Scan()
-	ckey = sc.Text()
+	ckey = strings.TrimSpace(sc.Text())
 
 	fmt.Print("Consumer Secret: ")
 	sc.Scan()
-	csecret = sc.Text()
+	csecret = strings.TrimSpace(sc.Text())
 
 	fmt.Print("Access Token: ")
 	sc.Scan()
-	atoken = sc.Text()
+	atoken = strings.TrimSpace(sc.Text())
 
 	fmt.Print("Access Secret: ")
 	sc.Scan()
-	asecret = sc.Text()
+	asecret = strings.TrimSpace(sc.Text())
 
 	return
 }
