@@ -141,7 +141,7 @@ func pickGenerator() trumpet.Generator {
 
 		// Won't be reached, but log.Fatal isn't recognized as a
 		// valid way to end a function that returns a value.
-		return nil
+		panic("log.Fatalf returned")
 	}
 }
 
@@ -156,6 +156,6 @@ func pickScheduler() trumpet.Scheduler {
 
 		// Won't be reached, but log.Fatal isn't recognized as a
 		// valid way to end a function that returns a value.
-		return nil
+		panic("log.Fatalf returned")
 	}
 }
