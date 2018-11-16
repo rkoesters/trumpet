@@ -1,5 +1,3 @@
-// trumpet is a bot that generates tweets based on the accounts it
-// follows.
 package main
 
 import (
