@@ -1,4 +1,7 @@
-// trumpet-config is an interactive trumpet configuration creation tool.
+// trumpet-mkconfig is an interactive trumpet configuration creation
+// tool. In addition to creating the configuration file, it also
+// verifies that the given credentials are valid and can be used to
+// connect to Twitter (this can be disabled with the -skip-verify flag).
 package main
 
 import (
