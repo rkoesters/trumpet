@@ -135,7 +135,7 @@ func pickGenerator() trumpet.Generator {
 	case "dummy":
 		return dummy.New()
 	case "markov":
-		return markov.NewChain(*markovLength)
+		return markov.New(*markovLength)
 	default:
 		log.Fatalf("unknown generator: %v", *generator)
 

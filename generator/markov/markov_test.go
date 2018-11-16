@@ -7,7 +7,7 @@ import (
 func TestMarkov(t *testing.T) {
 	const str = "one two three"
 
-	g := NewChain(3)
+	g := New(3)
 
 	g.Train(str)
 

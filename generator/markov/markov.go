@@ -6,38 +6,39 @@ package markov
 import (
 	"bufio"
 	"fmt"
+	"github.com/rkoesters/trumpet"
 	"io"
 	"math/rand"
 	"strings"
 	"sync"
 )
 
-// Prefix is the prefix of a markov chain.
-type Prefix []string
+// prefix is the prefix of a markov chain.
+type prefix []string
 
-// String returns the Prefix as a string.
-func (p Prefix) String() string {
+// String returns the prefix as a string.
+func (p prefix) String() string {
 	return strings.Join(p, " ")
 }
 
 // Shift adds the given word to the prefix, shifting existing words over
-// and removing the first word so that the Prefix is the same number of
+// and removing the first word so that the prefix is the same number of
 // words.
-func (p Prefix) Shift(word string) {
+func (p prefix) Shift(word string) {
 	copy(p, p[1:])
 	p[len(p)-1] = word
 }
 
-// Chain is a markov chain that implements trumpet.Generator.
-type Chain struct {
+// chain is a markov chain that implements trumpet.Generator.
+type chain struct {
 	chain     map[string][]string
 	prefixLen int
 	mutex     *sync.Mutex
 }
 
-// NewChain returns a markov chain that implements trumpet.Generator.
-func NewChain(prefixLen int) *Chain {
-	return &Chain{
+// New returns a markov chain that implements trumpet.Generator.
+func New(prefixLen int) trumpet.Generator {
+	return &chain{
 		chain:     make(map[string][]string),
 		prefixLen: prefixLen,
 		mutex:     new(sync.Mutex),
@@ -45,16 +46,16 @@ func NewChain(prefixLen int) *Chain {
 }
 
 // Train adds the given string to the markov chain.
-func (c *Chain) Train(s string) {
+func (c *chain) Train(s string) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
 	c.build(strings.NewReader(s))
 }
 
-func (c *Chain) build(r io.Reader) {
+func (c *chain) build(r io.Reader) {
 	br := bufio.NewReader(r)
-	p := make(Prefix, c.prefixLen)
+	p := make(prefix, c.prefixLen)
 	for {
 		var s string
 
@@ -69,10 +70,10 @@ func (c *Chain) build(r io.Reader) {
 	}
 }
 
-func (c *Chain) generateWords(n int) []string {
+func (c *chain) generateWords(n int) []string {
 	var words []string
 
-	p := make(Prefix, c.prefixLen)
+	p := make(prefix, c.prefixLen)
 
 	for i := 0; i < n; i++ {
 		choices := c.chain[p.String()]
@@ -88,7 +89,7 @@ func (c *Chain) generateWords(n int) []string {
 
 // Generate returns a string created from the markov chain that is at
 // most maxLength characters long.
-func (c *Chain) Generate(maxLength int) string {
+func (c *chain) Generate(maxLength int) string {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
