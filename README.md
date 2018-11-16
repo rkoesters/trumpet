@@ -45,7 +45,7 @@ Once you have the required information, you can use the
 
 For more information on how to use the tool, run:
 
-	$ trumpet-mkconfig -h
+	$ trumpet-mkconfig -help
 
 Running
 -------
@@ -58,7 +58,7 @@ post tweets:
 
 For more information on the program's usage, run:
 
-	$ trumpet -h
+	$ trumpet -help
 
 License
 -------
