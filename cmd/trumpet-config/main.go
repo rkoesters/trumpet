@@ -5,12 +5,15 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/rkoesters/trumpet/source/twitter/logger"
+	"gopkg.in/ChimeraCoder/anaconda.v2"
 	"os"
 )
 
 var (
 	showVersion = flag.Bool("version", false, "print version information and exit")
 	outfile     = flag.String("o", "trumpet.conf", "output file")
+	skipVerify  = flag.Bool("skip-verify", false, "skip credential verification")
 )
 
 func main() {
@@ -28,6 +31,10 @@ func main() {
 	}
 
 	ckey, csecret, atoken, asecret := getInput()
+
+	if !*skipVerify {
+		verifyCredentials(ckey, csecret, atoken, asecret)
+	}
 
 	writeOutput(ckey, csecret, atoken, asecret)
 }
@@ -52,6 +59,21 @@ func getInput() (ckey, csecret, atoken, asecret string) {
 	asecret = sc.Text()
 
 	return
+}
+
+func verifyCredentials(ckey, csecret, atoken, asecret string) {
+	anaconda.SetConsumerKey(ckey)
+	anaconda.SetConsumerSecret(csecret)
+
+	tapi := anaconda.NewTwitterApi(atoken, asecret)
+	tapi.SetLogger(logger.New(logger.LevelInfo))
+
+	ok, _ := tapi.VerifyCredentials()
+
+	if !ok {
+		fmt.Fprintf(os.Stderr, "failed to verify credentials\n")
+		os.Exit(1)
+	}
 }
 
 func writeOutput(ckey, csecret, atoken, asecret string) {
