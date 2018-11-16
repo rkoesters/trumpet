@@ -37,6 +37,8 @@ func main() {
 	}
 
 	writeOutput(ckey, csecret, atoken, asecret)
+
+	fmt.Println("Wrote configuration to", *outfile)
 }
 
 func getInput() (ckey, csecret, atoken, asecret string) {
