@@ -79,7 +79,7 @@ func verifyCredentials(ckey, csecret, atoken, asecret string) {
 func writeOutput(ckey, csecret, atoken, asecret string) {
 	f, err := os.Create(*outfile)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error opening %v: %v", *outfile, err)
+		fmt.Fprintf(os.Stderr, "error opening %v: %v\n", *outfile, err)
 		os.Exit(1)
 	}
 	defer f.Close()
