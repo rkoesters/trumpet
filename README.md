@@ -38,14 +38,27 @@ See
 <https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html>
 for more information.
 
-Once you have the required information, you can use the trumpet-mkconfig
-tool to create the configuration file:
-
-	$ ./trumpet-mkconfig
-
-or (if you ran `make install`)
+Once you have the required information, you can use the
+`trumpet-mkconfig` tool to create the configuration file.
 
 	$ trumpet-mkconfig
+
+For more information on how to use the tool, run:
+
+	$ trumpet-mkconfig -h
+
+Running
+-------
+
+Once you have created the configuration file, you are ready to run the
+bot. Make sure to use the `-live` flag if you want the bot to actually
+post tweets:
+
+	$ trumpet -live
+
+For more information on the program's usage, run:
+
+	$ trumpet -h
 
 License
 -------
