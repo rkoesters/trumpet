@@ -73,7 +73,7 @@ func verifyCredentials(ckey, csecret, atoken, asecret string) {
 	ok, _ := tapi.VerifyCredentials()
 
 	if !ok {
-		fmt.Fprintf(os.Stderr, "failed to verify credentials\n")
+		fmt.Fprintf(os.Stderr, "Failed to verify credentials\n")
 		os.Exit(1)
 	}
 }
@@ -81,7 +81,7 @@ func verifyCredentials(ckey, csecret, atoken, asecret string) {
 func writeOutput(ckey, csecret, atoken, asecret string) {
 	f, err := os.Create(*outfile)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error opening %v: %v\n", *outfile, err)
+		fmt.Fprintf(os.Stderr, "Error opening %v: %v\n", *outfile, err)
 		os.Exit(1)
 	}
 	defer f.Close()
