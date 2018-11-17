@@ -106,7 +106,7 @@ func main() {
 			log.Printf("OUT(((%v)))", t)
 			err = twitter.Tweet(t)
 			if err != nil {
-				log.Print("failed posting tweet")
+				log.Printf("failed posting tweet: %v", err)
 			}
 		}
 	}
