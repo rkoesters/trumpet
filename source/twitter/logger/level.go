@@ -16,7 +16,7 @@ const (
 	LevelFatal
 )
 
-// ParseLevel converts a string to a Level* uint.
+// ParseLevel converts a string into a Level.
 func ParseLevel(s string) Level {
 	switch s {
 	default:
