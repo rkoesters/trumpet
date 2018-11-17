@@ -10,14 +10,14 @@ import (
 // New returns an anaconda.Logger that uses the standard library's log
 // package while only printing messages that are at least the given log
 // level.
-func New(level uint) anaconda.Logger {
+func New(level Level) anaconda.Logger {
 	return &logger{
 		level: level,
 	}
 }
 
 type logger struct {
-	level uint
+	level Level
 }
 
 func (l *logger) Fatal(v ...interface{}) {

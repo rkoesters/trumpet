@@ -1,9 +1,12 @@
 package logger
 
+// Level is the log level threshold for for a Logger.
+type Level uint8
+
 // These constants are used by New to determine which print statements
 // should be printed to the log.
 const (
-	LevelDebug uint = iota
+	LevelDebug Level = iota
 	LevelInfo
 	LevelNotice
 	LevelWarning
@@ -13,39 +16,50 @@ const (
 	LevelFatal
 )
 
-// These constants are the string version of each log level. ParseLevel
-// will translate these strings to the respective uint.
-const (
-	LevelDebugString    = "debug"
-	LevelInfoString     = "info"
-	LevelNoticeString   = "notice"
-	LevelWarningString  = "warning"
-	LevelErrorString    = "error"
-	LevelCriticalString = "critical"
-	LevelPanicString    = "panic"
-	LevelFatalString    = "fatal"
-)
-
 // ParseLevel converts a string to a Level* uint.
-func ParseLevel(s string) uint {
+func ParseLevel(s string) Level {
 	switch s {
 	default:
 		fallthrough
-	case LevelDebugString:
+	case LevelDebug.String():
 		return LevelDebug
-	case LevelInfoString:
+	case LevelInfo.String():
 		return LevelInfo
-	case LevelNoticeString:
+	case LevelNotice.String():
 		return LevelNotice
-	case LevelWarningString:
+	case LevelWarning.String():
 		return LevelWarning
-	case LevelErrorString:
+	case LevelError.String():
 		return LevelError
-	case LevelCriticalString:
+	case LevelCritical.String():
 		return LevelCritical
-	case LevelPanicString:
+	case LevelPanic.String():
 		return LevelPanic
-	case LevelFatalString:
+	case LevelFatal.String():
 		return LevelFatal
+	}
+}
+
+// String returns the string representation of a Level type.
+func (l Level) String() string {
+	switch l {
+	default:
+		fallthrough
+	case LevelDebug:
+		return "debug"
+	case LevelInfo:
+		return "info"
+	case LevelNotice:
+		return "notice"
+	case LevelWarning:
+		return "warning"
+	case LevelError:
+		return "error"
+	case LevelCritical:
+		return "critical"
+	case LevelPanic:
+		return "panic"
+	case LevelFatal:
+		return "fatal"
 	}
 }
