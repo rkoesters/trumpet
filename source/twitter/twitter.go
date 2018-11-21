@@ -20,7 +20,7 @@ import (
 
 var (
 	configFile = flag.String("f", "trumpet.conf", "file to read twitter configuration from")
-	live       = flag.Bool("live", false, "send tweets to twitter instead of printing them to stdout")
+	dryRun     = flag.Bool("n", false, "do not post tweets, just print them")
 )
 
 var twitter *anaconda.TwitterApi
@@ -79,7 +79,7 @@ func GetFriends() ([]string, error) {
 
 // Tweet posts a tweet with contents of s.
 func Tweet(s string) error {
-	if !*live {
+	if *dryRun {
 		// silently drop tweet.
 		return nil
 	}
