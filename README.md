@@ -51,10 +51,9 @@ Running
 -------
 
 Once you have created the configuration file, you are ready to run the
-bot. Make sure to use the `-live` flag if you want the bot to actually
-post tweets:
+bot:
 
-	$ trumpet -live
+	$ trumpet
 
 For more information on the program's usage, run:
 
