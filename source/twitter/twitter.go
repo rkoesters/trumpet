@@ -151,13 +151,15 @@ func ListenForTweets(userIDs []string, c chan<- string, sched trumpet.Scheduler)
 	// iterate over incoming messages from twitter
 	for i := range stream.C {
 		switch msg := i.(type) {
-		default:
-			log.Printf("unknown message: %v", msg)
 		case anaconda.Tweet:
 			if isGoodTweet(msg, userIDs) {
 				c <- html.UnescapeString(msg.Text)
 				sched.Train(time.Now())
 			}
+		case anaconda.Event:
+			log.Println("received event:", msg.Event, "from:", msg.Source.ScreenName)
+		default:
+			log.Println("unknown message:", msg)
 		}
 	}
 }
