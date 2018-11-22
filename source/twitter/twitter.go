@@ -159,7 +159,7 @@ func ListenForTweets(userIDs []string, c chan<- string, sched trumpet.Scheduler)
 		case anaconda.Event:
 			log.Println("received event:", msg.Event, "from:", msg.Source.ScreenName)
 		default:
-			log.Println("unknown message:", msg)
+			log.Printf("unknown message: %T %v", msg, msg)
 		}
 	}
 }
